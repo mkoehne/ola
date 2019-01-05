@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "816998976999",
+    "firebase_url": "https://olaapp-7401a.firebaseio.com",
+    "project_id": "olaapp-7401a",
+    "storage_bucket": "olaapp-7401a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816998976999:android:866aac1dd1fe2823",
+        "android_client_info": {
+          "package_name": "com.asteria.ola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816998976999-ubgbqu7imvd6j3mai3sdjd036eu7nune.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA662Ho50W6vtlN2NFS1E_C0RRkVNk49UI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
