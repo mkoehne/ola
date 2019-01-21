@@ -1,24 +1,39 @@
-import 'package:firebase_database/firebase_database.dart';
-
 class Todo {
-  String key;
-  String subject;
-  bool completed;
-  String userId;
+  String _id;
+  String _subject;
+  bool _completed;
+  String _userId;
 
-  Todo(this.subject, this.userId, this.completed);
+  Todo(this._id, this._subject, this._completed);
 
-  Todo.fromSnapshot(DataSnapshot snapshot) :
-    key = snapshot.key,
-    userId = snapshot.value["userId"],
-    subject = snapshot.value["subject"],
-    completed = snapshot.value["completed"];
+  Todo.map(dynamic obj) {
+    this._id = obj['id'];
+    this._subject = obj['subject'];
+    this._completed = obj['completed'];
+    this._userId = obj['userId'];
+  }
 
-  toJson() {
-    return {
-      "userId": userId,
-      "subject": subject,
-      "completed": completed,
-    };
+  String get id => _id;
+  String get subject => _subject;
+  bool get completed => _completed;
+  String get userId => _userId;
+
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    if (_id != null) {
+      map['id'] = _id;
+    }
+    map['subject'] = _subject;
+    map['completed'] = _completed;
+    map['userId'] = _userId;
+
+    return map;
+  }
+
+  Todo.fromMap(Map<String, dynamic> map) {
+    this._id = map['id'];
+    this._subject = map['subject'];
+    this._completed = map['description'];
+    this._userId = map['userId'];
   }
 }

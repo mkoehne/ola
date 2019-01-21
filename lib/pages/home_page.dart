@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ola/services/authentication.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ola/models/todo.dart';
 import 'dart:async';
 
@@ -19,12 +19,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Todo> _todoList;
 
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  //final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  Firestore db = Firestore.instance;
   final _textEditingController = TextEditingController();
-  StreamSubscription<Event> _onTodoAddedSubscription;
-  StreamSubscription<Event> _onTodoChangedSubscription;
+  //StreamSubscription<Event> _onTodoAddedSubscription;
+  //StreamSubscription<Event> _onTodoChangedSubscription;
 
   Query _todoQuery;
 
@@ -32,23 +32,24 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _todoList = new List();
-    _todoQuery = _database
+
+    /*_todoQuery = _database
         .reference()
         .child("todo")
         .orderByChild("userId")
         .equalTo(widget.userId);
     _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(_onEntryAdded);
-    _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);
+    _onTodoChangedSubscription = _todoQuery.onChildChanged.listen(_onEntryChanged);*/
   }
 
   @override
   void dispose() {
-    _onTodoAddedSubscription.cancel();
-    _onTodoChangedSubscription.cancel();
+    //_onTodoAddedSubscription.cancel();
+    //_onTodoChangedSubscription.cancel();
     super.dispose();
   }
 
-  _onEntryChanged(Event event) {
+  /*onEntryChanged(Event event) {
     var oldEntry = _todoList.singleWhere((entry) {
       return entry.key == event.snapshot.key;
     });
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _todoList.add(Todo.fromSnapshot(event.snapshot));
     });
-  }
+  }*/
 
   _signOut() async {
     try {
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _addNewTodo(String todoItem) {
+  /*_addNewTodo(String todoItem) {
     if (todoItem.length > 0) {
 
       Todo todo = new Todo(todoItem.toString(), widget.userId, false);
@@ -173,28 +174,27 @@ class _HomePageState extends State<HomePage> {
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 30.0),));
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Ola'),
-          actions: <Widget>[
-            new FlatButton(
-                child: new Text('Logout',
-                    style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-                onPressed: _signOut)
-          ],
-        ),
-        body: _showTodoList(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _showDialog(context);
-          },
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        )
+      appBar: new AppBar(title: Text('ToDo')),
+      body: new StreamBuilder(
+          stream: Firestore.instance.collection('todo').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) const Text('Loading...');
+            return ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                padding: const EdgeInsets.all(25.0),
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data.documents[index];
+                  return Text(
+                    '${ds['subject']}:\n${ds['completed']}\n---',
+                    style: TextStyle(fontSize: 18.0),
+                  );
+                });
+          }),
     );
   }
 }
